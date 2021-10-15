@@ -1,0 +1,5 @@
+appId: com.codemaoplus.app
+win:
+  target: portable
+  icon: static/favicon.ico
+

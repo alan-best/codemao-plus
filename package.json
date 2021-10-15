@@ -1,0 +1,34 @@
+{
+  "name": "codemao-plus",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "dev": "nuxt",
+    "electron-start": "electron .",
+    "build": "electron-builder --config buildConfig.yml --ia32",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
+    "axios": "^0.22.0",
+    "core-js": "^3.15.1",
+    "http-server": "^13.0.2",
+    "nuxt": "^2.15.7",
+    "open": "^8.3.0",
+    "vuetify": "^2.5.5"
+  },
+  "devDependencies": {
+    "@nuxt/types": "^2.15.8",
+    "@nuxtjs/vuetify": "^1.12.1",
+    "@types/node": "^16.11.0",
+    "electron": "^15.1.2",
+    "electron-builder": "^22.13.1"
+  },
+  "config": {
+    "nuxt": {
+      "port": "7755"
+    }
+  }
+}
