@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-card color="error" class="d-flex justify-center align-center"
-            style="height: 100vh;width: 100vw;-webkit-app-region: drag" dark>
+            style="height: 100vh;width: 100vw;-webkit-app-region: drag" dark tile>
       <div>
         <v-card-title>
           <v-icon>mdi-alert</v-icon>
@@ -9,7 +9,7 @@
         </v-card-title>
         <v-card-text>应用程序内部错误<br/> {{ error.message }}</v-card-text>
         <v-card-actions style="-webkit-app-region: no-drag">
-          <v-btn outlined @click="back">返回首页</v-btn>
+          <v-btn outlined @click="back">返回</v-btn>
           <v-btn outlined @click="exitConfirm=true">退出</v-btn>
         </v-card-actions>
       </div>
@@ -50,7 +50,7 @@ export default {
       close()
     },
     back() {
-      location.href = '/'
+      location.href = '/startup'
     }
   }
 }

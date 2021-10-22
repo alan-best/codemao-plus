@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "main": "main.js",
+  "author": "Alan_Best",
+  "description": "编程猫辅助工具",
   "scripts": {
     "dev": "nuxt",
     "electron-start": "electron .",
@@ -15,6 +17,7 @@
     "axios": "^0.22.0",
     "core-js": "^3.15.1",
     "http-server": "^13.0.2",
+    "js-md5": "^0.7.3",
     "nuxt": "^2.15.7",
     "open": "^8.3.0",
     "vuetify": "^2.5.5"
@@ -23,6 +26,7 @@
     "@nuxt/types": "^2.15.8",
     "@nuxtjs/vuetify": "^1.12.1",
     "@types/node": "^16.11.0",
+    "chalk": "^4.1.2",
     "electron": "^15.1.2",
     "electron-builder": "^22.13.1"
   },

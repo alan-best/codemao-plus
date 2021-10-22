@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div class="tasks fill-height">
     <TaskList/>
-    <v-btn @click="$store.commit('tasks/setProcess',{process:2,index:0})">+</v-btn>
   </div>
 </template>
 
@@ -15,6 +14,7 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="sass">
+.tasks
+  overflow-y: auto
 </style>

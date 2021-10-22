@@ -26,8 +26,10 @@
 </template>
 <script>
 import Login from "~/components/Login";
-import axios from "axios";
+// import axios from "axios";
+import VERSION from "assets/version";
 
+// noinspection UnreachableCodeJS
 export default {
   layout: "index",
   components: {
@@ -35,22 +37,34 @@ export default {
   },
   data: () => ({
     latest: null,
-    currentVersion: 0
   }),
   methods: {
     downloadNewVersion() {
-      this.$refs.snackbar.showInfo("正在默认浏览器中打开下载地址(请允许程序通过杀毒软件)",5e3);
+      this.$refs.snackbar.showInfo("正在默认浏览器中打开下载地址(请允许程序通过杀毒软件)", 5e3);
       (require("open"))("https://github.com/alan-best/codemao-plus/releases")
     }
   },
   async mounted() {
-    const taskIndex = this.$store.state.tasks.list.length; //比新任务的index少1
-    this.$store.commit("tasks/addTask", {label: "检查更新", icon: "mdi-update", process: -1});
 
-    const {data} = await axios.get("https://gist.githubusercontent.com/alan-best/a02a1970b446cb647bb026d317ad434e/raw/5383fc67ff52198b24166dab9405738d338cbd64/CodemaoPlusVersion")
-    console.log(data);
-    this.$store.commit("tasks/removeTask", taskIndex)
-    if (JSON.parse(data) <= this.currentVersion) {
+
+    /////////
+    const data = "0"
+    this.latest = true;
+    return
+    ///////
+
+    // noinspection UnreachableCodeJS
+    const taskKey = new Date().getTime()
+    this.$store.commit("tasks/addTask", {
+      label: "检查更新",
+      icon: "mdi-update",
+      process: -1,
+      key: taskKey
+    });
+    // const {data} = await axios.get("https://gist.githubusercontent.com/alan-best/a02a1970b446cb647bb026d317ad434e/raw/5383fc67ff52198b24166dab9405738d338cbd64/CodemaoPlusVersion")
+
+    this.$store.commit("tasks/removeTask", taskKey)
+    if (JSON.parse(data) <= VERSION) {
       this.latest = true;
       this.$refs.snackbar.showSuccess("更新检查: 当前是最新版本");
 

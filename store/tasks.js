@@ -1,16 +1,14 @@
-export const state = {
-  list: [
-    // {icon: "", label: "任务管理器", process: -1}
-  ]
-}
+export const state = () => ({
+  list: []
+})
 export const mutations = {
   addTask(state, obj) {
     state.list.push(obj);
   },
-  removeTask(state, index) {
-    state.list.splice(index, 1)
+  removeTask(state, key) {
+    state.list.splice(state.list.map(i => i.key).indexOf(key), 1)
   },
-  setProcess(state, {index, process}) {
-    state.list[index].process = process;
+  setProcess(state, {key, process}) {
+    state.list[state.list.map(i => i.key).indexOf(key)].process = process;
   }
 }

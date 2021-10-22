@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center">
-    <v-card min-width="400" :disabled="loading">
+    <v-card :min-width="350" :min-height="250" :disabled="loading">
       <v-card-title>
 
         登录CODEMAO账号
@@ -10,11 +10,12 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
-        <v-tabs color="secondary">
+        <v-tabs color="secondary" :height="$vuetify.breakpoint.smAndDown?40:undefined">
           <v-tab>常规登录</v-tab>
           <v-tab-item>
-            <v-text-field v-model="form.username" label="用户名/手机号"/>
-            <v-text-field v-model="form.password" type="password" label="密码"/>
+            <br/>
+            <v-text-field :dense="$vuetify.breakpoint.smAndDown" v-model="form.username" label="用户名/手机号"/>
+            <v-text-field :dense="$vuetify.breakpoint.smAndDown" v-model="form.password" type="password" label="密码"/>
             <v-btn width="100%" color="primary" :disabled="!form.eula||!form.username||!form.password"
                    @click="submitLogin()" :loading="loading">确定
             </v-btn>
@@ -35,9 +36,9 @@
         <v-expand-transition>
           <div v-show="!form.eula">
           <span>
-            将账号作为流量资源, 即使用你的账号凭据为你(或他人)刷浏览量,点赞,回帖等. 通常情况下不会影响到正常的账号使用.
+            将账号作为流量资源, 通常情况下不会影响到正常的账号使用.
             <span class="error--text"> 但是如果使用不当, 可能会导致账号封禁或禁言等, 后果自负.</span>
-            但是我们不会保存你的账号和密码, 也不会将你的账号用于其他用途.
+            我们不会保存你的账号和密码, 也不会将你的账号用于其他用途.
           </span></div>
         </v-expand-transition>
         <v-alert v-show="error" type="error">
@@ -81,7 +82,6 @@ export default {
         });
         console.log("登陆成功")
         console.log(data);
-        this.$store.commit("accounts/add", data)
         this.$emit("login", data);
         this.form = {...formDefault};
       } catch (e) {
@@ -115,7 +115,6 @@ export default {
           {headers: {Authorization: this.form.token}})).data;
         const finalData = {user_info: details, auth: {token: this.form.token, ...details}}
         this.$emit("login", finalData);
-        this.$store.commit("accounts/add", finalData)
         this.form = {...formDefault};
       } catch (e) {
         if (e.response.status === 401) {

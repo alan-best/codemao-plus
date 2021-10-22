@@ -12,7 +12,8 @@ export default {
     titleTemplate: 'CodemaoPlus',
     title: 'CodemaoPlus',
     htmlAttrs: {
-      lang: 'zh'
+      lang: 'zh',
+      spellcheck: false
     },
     meta: [
       {charset: 'utf-8'},
@@ -79,10 +80,13 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {
-      config.target = "electron-renderer"
+      config.target = "electron-renderer";
       if (ctx.isDev) {
         config.devtool = "inline-source-map"
       }
     }
+  },
+  generate:{
+    dir:"webDist"
   }
 }

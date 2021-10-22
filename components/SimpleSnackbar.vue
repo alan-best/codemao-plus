@@ -34,7 +34,7 @@ export default {
     timeout: 3e3,
     info: false,
     defaultAttrs: {
-      bottom: true, right: true, absolute: true, transition: "dialog-bottom-transition"
+      bottom: true, right: true, absolute: true,transition:"slide-x-reverse-transition"
     }
   }),
   methods: {

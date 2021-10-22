@@ -5554,6 +5554,11 @@ jiti@^1.9.2:
   resolved "https://registry.npmmirror.com/jiti/download/jiti-1.12.6.tgz#8884d53a10bd571e0e85787994d97cfcc48ac6f9"
   integrity sha1-iITVOhC9Vx4OhXh5lNl8/MSKxvk=
 
+js-md5@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.npm.taobao.org/js-md5/download/js-md5-0.7.3.tgz#b4f2fbb0b327455f598d6727e38ec272cd09c3f2"
+  integrity sha1-tPL7sLMnRV9ZjWcn447Ccs0Jw/I=
+
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.nlark.com/js-tokens/download/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"

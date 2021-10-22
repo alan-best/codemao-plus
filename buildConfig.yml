@@ -1,5 +1,10 @@
 appId: com.codemaoplus.app
 win:
-  target: portable
+  target: nsis
   icon: static/favicon.ico
-
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+extraResources:
+  - "webDist/**/*"
+  - loading.html

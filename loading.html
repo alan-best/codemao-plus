@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <title>CodemaoPlus Loading</title>
+  <style>
+    html, body {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      padding: 0;
+      margin: 0;
+      -webkit-app-region: drag;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #111;
+        color: #fff;
+      }
+    }
+
+    * {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #loadingBar {
+      width: 100vw;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background-color: #aaa;
+    }
+
+    #loadingBar #loading {
+      height: 100%;
+      animation: loading ease-out 20s forwards;
+      background-color: #ff4500;
+    }
+
+    @keyframes loading {
+      0% {
+        opacity: 0;
+        width: 0;
+      }
+      20% {
+        opacity: 1;
+        width: 50vw;
+      }
+      60% {
+        width: 70vw;
+        opacity: 1;
+      }
+      100% {
+        opacity: 1;
+        width: 90vw;
+      }
+    }
+
+  </style>
+</head>
+<body>
+<div>
+  <h1>Codemao plus</h1>
+  <h3>编程猫辅助工具</h3>
+</div>
+<span style="position: absolute;left: 0;bottom: 5px;color: #999">正在启动...(此过程可能需要较长时间)</span>
+<div id="loadingBar">
+
+  <div id="loading"></div>
+</div>
+<script>
+  const {ipcRenderer} = require("electron");
+  ipcRenderer.on("close",()=>{
+    close()
+  })
+</script>
+</body>
+</html>

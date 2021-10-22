@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="height: 100vh;width: 100vw" class="app">
     <v-app-bar
       dense
       app
@@ -7,7 +7,7 @@
       dark
       clipped-left
       style="-webkit-app-region: drag"
-      flat
+      :flat="$vuetify.breakpoint.smAndDown"
     >
 
       <h3>Codemao Plus</h3>
@@ -27,9 +27,11 @@
         </v-btn>
       </div>
     </v-app-bar>
-    <v-navigation-drawer app clipped permanent>
-      <v-list dense>
-        <v-list-item-group v-model="selectedNav" mandatory color="primary">
+    <v-navigation-drawer :mini-variant="$vuetify.breakpoint.smAndDown"
+                         app clipped permanent>
+      <v-list :dense="$vuetify.breakpoint.mdAndDown">
+        <v-list-item-group v-if="selectedNav>=0" v-model="selectedNav" mandatory
+                           color="primary">
           <v-list-item v-for="(item,index) of nav"
                        :key="index"
                        @click="selectedNav=index;item.path===$route.path?void 0:$router.replace(item.path)">
@@ -39,11 +41,26 @@
             <v-list-item-title>{{ item.label }}</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
+        <div v-else>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-help-circle</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+
+              <v-list-item-title>特殊页面</v-list-item-title>
+              <v-list-item-subtitle>{{ $route.path }}</v-list-item-subtitle>
+
+            </v-list-item-content>
+
+          </v-list-item>
+        </div>
       </v-list>
     </v-navigation-drawer>
 
-    <v-main>
-      <v-container style="height: 100%">
+    <v-main style="height: 100%;">
+      <v-container
+        style="height: 100%;overflow-x: hidden !important;overflow-y: hidden">
         <v-slide-x-transition>
           <Nuxt keep-alive/>
         </v-slide-x-transition>
@@ -51,12 +68,18 @@
     </v-main>
     <v-footer
       app
+      :height="$vuetify.breakpoint.smAndDown?'36px':'48px'"
     >
-      <span>Made by Alan_Best</span>
+      <span class="text-sm-body-1">Made by Alan_Best</span>
       <v-spacer/>
       <v-scroll-y-transition>
-        <v-btn text tile x-small @click="taskList=!taskList" v-show="tasks.length>0">
-          <v-progress-circular indeterminate size="10" width="1"/>
+        <v-btn outlined :x-small="$vuetify.breakpoint.smAndDown" color="success"
+               @click="taskList=true"
+               v-show="tasks.length>0"
+               v-click-outside="taskListCheckOutside">
+          <v-progress-circular indeterminate
+                               :size="$vuetify.breakpoint.smAndDown?10:20"
+                               :width="$vuetify.breakpoint.smAndDown?1:3"/>
           正在运行{{ tasks.length }}个任务
         </v-btn>
       </v-scroll-y-transition>
@@ -64,17 +87,29 @@
 
     </v-footer>
     <v-scroll-y-reverse-transition>
-      <v-card style="position: fixed;right: 8px;bottom: 44px" flat min-height="200" min-width="300" v-show="taskList">
+      <v-card
+        :style="`max-height:50vh;width:350px;position: fixed;right: 8px;bottom: ${$vuetify.breakpoint.smAndDown?38:50}px;overflow-y: auto;z-index:999`"
+
+        min-height="300"
+        :min-width="$vuetify.breakpoint.smAndDown?300:400"
+        v-show="taskList">
         <TaskList/>
       </v-card>
     </v-scroll-y-reverse-transition>
     <v-dialog v-model="reloadConfirm" width="300">
       <v-card>
         <v-card-title>确认重启程序吗?</v-card-title>
-        <v-card-text>部分正在运行的任务可能会被中断</v-card-text>
+        <v-card-text>
+          {{
+            $store.state.tasks.list.length > 0 ? "正在运行的任务可能会无法查询进度, 且会驻留后台或被中断" : "数据将会安全地保存"
+          }}
+
+        </v-card-text>
         <v-card-actions>
           <v-btn width="50%" color="error" text @click="reload">确定</v-btn>
-          <v-btn width="50%" color="primary" text @click="reloadConfirm=false">取消</v-btn>
+          <v-btn width="50%" color="primary" text @click="reloadConfirm=false">
+            取消
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -85,6 +120,8 @@
       ></v-progress-circular>
     </v-overlay>
     <v-overlay :value="!focused"></v-overlay>
+    <SimpleSnackbar ref="snackbar" style="transform: translateY(-50px);z-index: 999"/>
+    <BetaDialog/>
   </v-app>
 </template>
 
@@ -101,7 +138,9 @@ export default {
       nav: [
         {label: "主页", path: "/", icon: "mdi-home"},
         {label: "账号管理", path: "/accounts", icon: "mdi-account"},
-        {label: "进程管理器", path: "/tasks", icon: "mdi-wrench"}
+        {label: "进程管理器", path: "/tasks", icon: "mdi-wrench"},
+        {label: "开始运行", path: "/start", icon: "mdi-animation-play"},
+        {label: "超级搜索", path: "/search", icon: "mdi-database-search"}
       ],
       taskList: false,
       reloadConfirm: false,
@@ -109,8 +148,7 @@ export default {
     }
   },
   mounted() {
-    const mediaQueryListDark = window.matchMedia('(prefers-color-scheme: dark)');
-    this.$vuetify.theme.dark = mediaQueryListDark.matches;
+
     this.selectedNav = this.nav.map(i => i.path).indexOf(this.$route.path);
     const {ipcRenderer} = require("electron");
     window.addEventListener("focus", () => {
@@ -119,14 +157,24 @@ export default {
     window.addEventListener("blur", () => {
       this.focused = false
     })
-    ipcRenderer.on("focus", () => {
-      this.focused = true
+    this.loadData();
+    ipcRenderer.on("will-open-url",()=>{
+      this.$refs.snackbar.showInfo("将在默认浏览器中打开链接, 请允许程序通过杀毒软件")
     })
-    ipcRenderer.on("blur", () => {
-      this.focused = false
-    })
+
   },
   methods: {
+    stopTasks(){
+      this.$store.state.tasks.list.forEach(t => t.cancel())
+    },
+    saveData() {
+      localStorage.setItem("accounts", JSON.stringify([...this.$store.state.accounts.list]));
+    },
+    loadData() {
+      // const accountData = JSON.parse(localStorage.getItem("accounts") || "[]")
+      // console.log(accountData)
+      // this.$store.commit("accounts/load",accountData)
+    },
     windowMinimize() {
       const {ipcRenderer} = require("electron");
       ipcRenderer.send("minimize")
@@ -137,15 +185,24 @@ export default {
       ipcRenderer.send("maximize")
     },
     windowClose() {
-      close()
+      this.loading = true;
+      this.saveData();
+      this.stopTasks()
+      close();
     },
     reload() {
+
       this.reloadConfirm = false
       this.loading = true;
+      this.saveData();
+      this.stopTasks();
       setTimeout(() => {
-        location.reload()
-      }, 1e3)
+        location.href = '/startup'
+      }, Math.random()*1e3);
 
+    },
+    taskListCheckOutside() {
+      this.taskList = false
     }
   },
   computed: {
@@ -156,8 +213,29 @@ export default {
 }
 </script>
 <style lang="sass">
-html, body
-  overflow-y: hidden !important
+.app
+  overflow-y: auto !important
+  overflow-x: hidden !important
   user-select: none
 
+html
+  overflow: hidden !important
+
+::-webkit-scrollbar
+  width: 8px
+
+::-webkit-scrollbar-button
+  display: none
+
+::-webkit-scrollbar-track
+  background: none
+
+::-webkit-scrollbar-thumb
+  background: #aaa
+
+::-webkit-scrollbar-thumb:hover
+  background: #ccc
+
+::-webkit-scrollbar-thumb:active
+  background: #eee
 </style>
